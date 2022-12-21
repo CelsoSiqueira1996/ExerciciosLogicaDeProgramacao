@@ -69,7 +69,6 @@ class Questao03
             {
                 percurso[j] = csvCaminho.GetField<int>(j);
             }
-            i++;
         } while (csvCaminho.Read());
 
         for (int j = 1; j < percurso.Length; j++)
