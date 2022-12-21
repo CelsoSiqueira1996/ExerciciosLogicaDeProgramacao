@@ -22,9 +22,9 @@ class Questao03
         csvPercurso.Read();
 
         int dimensaoMatriz = csvDistancias.Record.GetLength(0);
-        int dimensaoCaminho = csvPercurso.Record.GetLength(0);
+        int dimensaoPercurso = csvPercurso.Record.GetLength(0);
         int[,] distancias = new int[dimensaoMatriz, dimensaoMatriz];
-        int[] percurso = new int[dimensaoCaminho];
+        int[] percurso = new int[dimensaoPercurso];
 
         do
         {
@@ -37,7 +37,7 @@ class Questao03
 
         do
         {
-            for (int j = 0; j < dimensaoCaminho; j++)
+            for (int j = 0; j < dimensaoPercurso; j++)
             {
                 int.TryParse(csvPercurso.Record[j], out percurso[j]);
             }
