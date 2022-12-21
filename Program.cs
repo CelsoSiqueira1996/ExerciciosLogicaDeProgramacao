@@ -12,62 +12,51 @@ class Questao03
         string caminhoPercurso = Path.Combine(caminhoDesktop, "caminho.txt");
         var config = new CsvConfiguration(CultureInfo.InvariantCulture){HasHeaderRecord = false};
         using var readerDistancias = new StreamReader(caminhoMatrizDistancias) ;
-        using var csvDistancias = new CsvReader(readerDistancias, config);
+        using var csvDistancias = new CsvParser(readerDistancias, config);
         using var readerCaminho = new StreamReader(caminhoPercurso);
-        using var csvCaminho = new CsvReader(readerCaminho, config);
-        int contadorDistancias = 0;
-        int contadorCaminho = 0;
-        int dimensaoMatriz = 0;
-        int dimensaoCaminho = 0;
+        using var csvCaminho = new CsvParser(readerCaminho, config);
+        int dimensaoMatriz = csvDistancias.Record.GetLength(0);
+        int dimensaoCaminho = csvCaminho.Record.GetLength(0);
         int distancia = 0;
         int i = 0;
+
         csvDistancias.Read();
         csvCaminho.Read();
-
-        while (contadorDistancias != 1)
+        
+        try
         {
-            try
-            {
-                csvDistancias.GetField<int>(dimensaoMatriz);
-                dimensaoMatriz++;
-            }
-            catch
-            {
-                contadorDistancias++;
-            }
+            int[,] distancias = new int[dimensaoMatriz, dimensaoMatriz];
+        }
+        catch
+        {
+            Console.WriteLine("O arquivo matriz.txt está vazio!");
+            return;
         }
 
-        int[,] distancias = new int[dimensaoMatriz, dimensaoMatriz];
+        try
+        {
+            int[] percurso = new int[dimensaoCaminho];
+        }
+        catch
+        {
+            Console.WriteLine("O arquivo caminho.txt está vazio!");
+            return;
+        }
 
         do
         {
             for (int j = 0; j < dimensaoMatriz; j++)
             {
-                distancias[i, j] = csvDistancias.GetField<int>(j);
+                distancias[i, j] = csvDistancias.Record[j];
             }
             i++;
         }while(csvDistancias.Read());
-
-        while (contadorCaminho != 1)
-        {
-            try
-            {
-                csvCaminho.GetField<int>(dimensaoCaminho);
-                dimensaoCaminho++;
-            }
-            catch
-            {
-                contadorCaminho++;
-            }
-        }
-
-        int[] percurso = new int[dimensaoCaminho];
 
         do
         {
             for (int j = 0; j < dimensaoCaminho; j++)
             {
-                percurso[j] = csvCaminho.GetField<int>(j);
+                percurso[j] = csvCaminho.Record[j];
             }
         } while (csvCaminho.Read());
 
