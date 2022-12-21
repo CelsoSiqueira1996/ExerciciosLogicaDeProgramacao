@@ -13,41 +13,24 @@ class Questao03
         var config = new CsvConfiguration(CultureInfo.InvariantCulture){HasHeaderRecord = false};
         using var readerDistancias = new StreamReader(caminhoMatrizDistancias) ;
         using var csvDistancias = new CsvParser(readerDistancias, config);
-        using var readerCaminho = new StreamReader(caminhoPercurso);
-        using var csvCaminho = new CsvParser(readerCaminho, config);
-        int dimensaoMatriz = csvDistancias.Record.GetLength(0);
-        int dimensaoCaminho = csvCaminho.Record.GetLength(0);
+        using var readerPercurso = new StreamReader(caminhoPercurso);
+        using var csvPercurso = new CsvParser(readerPercurso, config);
         int distancia = 0;
         int i = 0;
 
         csvDistancias.Read();
-        csvCaminho.Read();
-        
-        try
-        {
-            int[,] distancias = new int[dimensaoMatriz, dimensaoMatriz];
-        }
-        catch
-        {
-            Console.WriteLine("O arquivo matriz.txt está vazio!");
-            return;
-        }
+        csvPercurso.Read();
 
-        try
-        {
-            int[] percurso = new int[dimensaoCaminho];
-        }
-        catch
-        {
-            Console.WriteLine("O arquivo caminho.txt está vazio!");
-            return;
-        }
+        int dimensaoMatriz = csvDistancias.Record.GetLength(0);
+        int dimensaoCaminho = csvPercurso.Record.GetLength(0);
+        int[,] distancias = new int[dimensaoMatriz, dimensaoMatriz];
+        int[] percurso = new int[dimensaoCaminho];
 
         do
         {
             for (int j = 0; j < dimensaoMatriz; j++)
             {
-                distancias[i, j] = csvDistancias.Record[j];
+                int.TryParse(csvDistancias.Record[j], out distancias[i, j]);
             }
             i++;
         }while(csvDistancias.Read());
@@ -56,9 +39,9 @@ class Questao03
         {
             for (int j = 0; j < dimensaoCaminho; j++)
             {
-                percurso[j] = csvCaminho.Record[j];
+                int.TryParse(csvPercurso.Record[j], out percurso[j]);
             }
-        } while (csvCaminho.Read());
+        } while (csvPercurso.Read());
 
         for (int j = 1; j < percurso.Length; j++)
         {
